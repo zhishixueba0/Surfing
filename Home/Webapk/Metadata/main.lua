@@ -286,7 +286,7 @@ Http.get(url2 .. "?t=" .. os.time(), nil, "UTF-8", headers, function(code, conte
                     ipv6Tv.setText(ipV6Text)
                 end)
                 
-                addStyledText("\n@Surfing WebApp 2023. | 基于 luaJava 框架开发", 14, 0xFF444444)
+                addStyledText("\n@Surfing WebApp 2023.", 14, 0xFF444444)
             end
 
             local function getLastCommitTime()

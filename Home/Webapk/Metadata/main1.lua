@@ -238,11 +238,11 @@ end)
                     window.setBackgroundDrawable(bg)
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(BTN_COLOR)
                 end
-                menu.add("应用过滤").onMenuItemClick = showPlaceholderDialog
-                menu.add("磁贴设置").onMenuItemClick = showPlaceholderDialog
+                menu.add("      应用过滤").onMenuItemClick = showPlaceholderDialog
+                menu.add("      磁贴设置").onMenuItemClick = showPlaceholderDialog
 
 
-                menu.add("设置 URL").onMenuItemClick = function()
+                menu.add("      设置 URL").onMenuItemClick = function()
                     local customLayout = LinearLayout(themedContext)
                     customLayout.setOrientation(LinearLayout.VERTICAL)
                     customLayout.setPadding(dp2px(20), dp2px(20), dp2px(20), dp2px(0))
@@ -339,11 +339,11 @@ end)
                 end
 
 
-                menu.add("Ad 拦截测试").onMenuItemClick = function()
+                menu.add("      Ad 拦截测试").onMenuItemClick = function()
                     webView.loadUrl("https://paileactivist.github.io/toolz/adblock.html")
                 end
 
-                menu.add("背景图床 URL").onMenuItemClick = function()
+                menu.add("      背景图床 URL").onMenuItemClick = function()
                     local intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://pomf2.lain.la/"))
                     activity.startActivity(intent)
                     return true
@@ -512,7 +512,7 @@ end)
                     end)
                 end
 
-                menu.add("版本信息").onMenuItemClick = function()
+                menu.add("      版本信息").onMenuItemClick = function()
                     if isNetworkAvailable() then
                         getLastCommitTime()
                     else
@@ -520,11 +520,11 @@ end)
                     end
                 end
 
-                menu.add("更新 WebView").onMenuItemClick = function()
+                menu.add("      更新 WebView").onMenuItemClick = function()
                     activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.webview")))
                 end
 
-                menu.add("点我闪退(Exit)").onMenuItemClick = function()
+                menu.add("      点我闪退(Exit)").onMenuItemClick = function()
                     activity.finish()
                     os.exit(0)
                 end

@@ -28,167 +28,7 @@ end)
                 local themedContext, DLG_BG_COLOR, DLG_TEXT_COLOR, DLG_MESSAGE_COLOR, BTN_COLOR = getDialogThemeContext()
                 local function dp2px(dp) return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, activity.getResources().getDisplayMetrics()) end
 
-                menu.add("📁 清除数据").onMenuItemClick = function()
-                    local subPop = PopupMenu(activity, more)
-                    local subMenu = subPop.Menu
-                    
-                    subMenu.add("清除程序数据").onMenuItemClick = function()
-                        local customLayout = LinearLayout(themedContext)
-                        customLayout.setOrientation(LinearLayout.VERTICAL)
-                        customLayout.setPadding(dp2px(20), dp2px(20), dp2px(20), dp2px(0))
-                        
-                        local titleTV = TextView(themedContext)
-                        titleTV.setText("注意")
-                        titleTV.setTextSize(20)
-                        titleTV.setTextColor(DLG_TEXT_COLOR)
-                        titleTV.setTypeface(nil, Typeface.BOLD)
-                        customLayout.addView(titleTV)
-                        
-                        local messageTV = TextView(themedContext)
-                        messageTV.setText("此操作会清除自身全部数据并退出！")
-                        messageTV.setTextSize(16)
-                        messageTV.setTextColor(DLG_MESSAGE_COLOR)
-                        messageTV.setPadding(0, dp2px(15), 0, dp2px(10))
-                        customLayout.addView(messageTV)
-                
-                        local builder = AlertDialog.Builder(themedContext)
-                            .setView(customLayout)
-                            .setPositiveButton("确定", function()
-                                activity.finish()
-                                os.execute("pm clear " .. activity.getPackageName())
-                            end)
-                            .setNegativeButton("取消", nil)
-                            .setCancelable(false)
-                
-                        local dialog = builder.create()
-                        dialog.show()
-                
-                        local window = dialog.getWindow()
-                        local bg = GradientDrawable()
-                        bg.setColor(DLG_BG_COLOR)
-                        bg.setCornerRadius(dp2px(15))
-                        window.setBackgroundDrawable(bg)
-                
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(BTN_COLOR)
-                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(BTN_COLOR)
-                    end
-
-                    subMenu.add("清除网站数据").onMenuItemClick = function()
-                        local currentUrl = webView.getUrl() or ""
-                        local currentOrigin = currentUrl:match("^(https?://[^\n/]+)") or "未知网站"
-                        
-                        local customLayout = LinearLayout(themedContext)
-                        customLayout.setOrientation(LinearLayout.VERTICAL)
-                        customLayout.setPadding(dp2px(20), dp2px(20), dp2px(20), dp2px(0))
-                        
-                        local titleTV = TextView(themedContext)
-                        titleTV.setText("清除当前网站数据")
-                        titleTV.setTextSize(20)
-                        titleTV.setTextColor(DLG_TEXT_COLOR)
-                        titleTV.setTypeface(nil, Typeface.BOLD)
-                        customLayout.addView(titleTV)
-                        
-                        local messageTV = TextView(themedContext)
-                        messageTV.setText(
-                            "确定要清除 [" .. currentOrigin .. "] 的以下数据吗？\n\n" ..
-                            "1. 当前网站的缓存文件\n" ..
-                            "2. 当前网站的本地存储 (Local Storage)\n\n" ..
-                            "注意：Cookie 不会被清除"
-                        )
-                        messageTV.setTextSize(16)
-                        messageTV.setTextColor(DLG_MESSAGE_COLOR)
-                        messageTV.setPadding(0, dp2px(15), 0, dp2px(10))
-                        customLayout.addView(messageTV)
-                    
-                        local builder = AlertDialog.Builder(themedContext)
-                            .setView(customLayout)
-                            .setPositiveButton("确定", function()
-                                webView.clearCache(true) 
-                                
-                                local jsToClearStorage = "localStorage.clear();"
-                                
-                                if webView.evaluateJavascript then
-                                    webView.evaluateJavascript(jsToClearStorage, nil)
-                                else
-                                    webView.loadUrl("javascript:" .. jsToClearStorage)
-                                end
-                                
-                                webView.reload()
-                                
-                                Toast.makeText(activity, "清除完毕", Toast.LENGTH_LONG).show()
-                            end)
-                            .setNegativeButton("取消", nil)
-                            .setCancelable(false) 
-                    
-                        local dialog = builder.create()
-                        dialog.show()
-                        
-                        dialog.setCanceledOnTouchOutside(false)
-                    
-                        local window = dialog.getWindow()
-                        local bg = GradientDrawable()
-                        bg.setColor(DLG_BG_COLOR)
-                        bg.setCornerRadius(dp2px(15))
-                        window.setBackgroundDrawable(bg)
-                    
-                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(BTN_COLOR)
-                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(BTN_COLOR)
-                    end
-                    subPop.show()
-                end
-
-                menu.add("📁 IP 检查").onMenuItemClick = function()
-                    local subPop = PopupMenu(activity, more)
-                    local subMenu = subPop.Menu
-                    subMenu.add("IPw.cn").onMenuItemClick = function()
-                        webView.loadUrl("https://ipw.cn/")
-                    end
-                    subMenu.add("纯IPv6测试").onMenuItemClick = function()
-                        webView.loadUrl("https://ipv6.test-ipv6.com/")
-                    end
-                    subMenu.add("网站延迟").onMenuItemClick = function()
-                        webView.loadUrl("https://ip.skk.moe/simple")
-                    end
-                    subMenu.add("DNS泄露测试 (browserscan)").onMenuItemClick = function()
-                        webView.loadUrl("https://www.browserscan.net/zh/dns-leak")
-                    end
-                    subMenu.add("DNS泄露测试 (Surfshark)").onMenuItemClick = function()
-                        webView.loadUrl("https://surfshark.com/zh/dns-leak-test")
-                    end
-                    subPop.show()
-                end
-
-                menu.add("📁 切换面板").onMenuItemClick = function()
-                    local subPop = PopupMenu(activity, more)
-                    local subMenu = subPop.Menu
-                    subMenu.add("Meta").onMenuItemClick = function()
-                        local url = "https://metacubex.github.io/metacubexd/#/proxies"
-                        webView.loadUrl(url)
-                        defaultUrl = url
-                        saveDefaultUrl(url)
-                    end
-                    subMenu.add("Yacd").onMenuItemClick = function()
-                        local url = "https://yacd.metacubex.one/#/proxies"
-                        webView.loadUrl(url)
-                        defaultUrl = url
-                        saveDefaultUrl(url)
-                    end
-                    subMenu.add("Zash").onMenuItemClick = function()
-                        local url = "https://board.zash.run.place/#/proxies"
-                        webView.loadUrl(url)
-                        defaultUrl = url
-                        saveDefaultUrl(url)
-                    end
-                    subMenu.add("Local（本地端口）").onMenuItemClick = function()
-                        local url = "http://127.0.0.1:9090/ui/#/proxies"
-                        webView.loadUrl(url)
-                        defaultUrl = url
-                        saveDefaultUrl(url)
-                    end
-                    subPop.show()
-                end
-
-                menu.add("      外部打开").onMenuItemClick = function()
+                menu.add("外部打开").onMenuItemClick = function()
                     local currentUrl = webView.getUrl()
                     if currentUrl and currentUrl:match("^https?://") then
                         local intent = Intent(Intent.ACTION_VIEW, Uri.parse(currentUrl))
@@ -238,11 +78,11 @@ end)
                     window.setBackgroundDrawable(bg)
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(BTN_COLOR)
                 end
-                menu.add("      应用过滤").onMenuItemClick = showPlaceholderDialog
-                menu.add("      磁贴设置").onMenuItemClick = showPlaceholderDialog
+                menu.add("应用过滤").onMenuItemClick = showPlaceholderDialog
+                menu.add("磁贴设置").onMenuItemClick = showPlaceholderDialog
 
 
-                menu.add("      设置 URL").onMenuItemClick = function()
+                menu.add("主页设置").onMenuItemClick = function()
                     local customLayout = LinearLayout(themedContext)
                     customLayout.setOrientation(LinearLayout.VERTICAL)
                     customLayout.setPadding(dp2px(20), dp2px(20), dp2px(20), dp2px(0))
@@ -339,11 +179,11 @@ end)
                 end
 
 
-                menu.add("      Ad 拦截测试").onMenuItemClick = function()
+                menu.add("Ad 拦截测试").onMenuItemClick = function()
                     webView.loadUrl("https://paileactivist.github.io/toolz/adblock.html")
                 end
 
-                menu.add("      背景图床 URL").onMenuItemClick = function()
+                menu.add("背景图床 URL").onMenuItemClick = function()
                     local intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://pomf2.lain.la/"))
                     activity.startActivity(intent)
                     return true
@@ -512,7 +352,11 @@ end)
                     end)
                 end
 
-                menu.add("      版本信息").onMenuItemClick = function()
+                menu.add("更新 WebView").onMenuItemClick = function()
+                    activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.webview")))
+                end
+
+                menu.add("版本信息").onMenuItemClick = function()
                     if isNetworkAvailable() then
                         getLastCommitTime()
                     else
@@ -520,11 +364,174 @@ end)
                     end
                 end
 
-                menu.add("      更新 WebView").onMenuItemClick = function()
-                    activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.webview")))
+                menu.add("更多选项").onMenuItemClick = function()
+                    local subPop = PopupMenu(activity, more)
+                    local subMenu = subPop.Menu
+                    
+                    subMenu.add("清除数据").onMenuItemClick = function()
+                        local dataPop = PopupMenu(activity, more)
+                        local dataMenu = dataPop.Menu
+                        
+                        dataMenu.add("清除程序数据").onMenuItemClick = function()
+                            local customLayout = LinearLayout(themedContext)
+                            customLayout.setOrientation(LinearLayout.VERTICAL)
+                            customLayout.setPadding(dp2px(20), dp2px(20), dp2px(20), dp2px(0))
+                            
+                            local titleTV = TextView(themedContext)
+                            titleTV.setText("注意")
+                            titleTV.setTextSize(20)
+                            titleTV.setTextColor(DLG_TEXT_COLOR)
+                            titleTV.setTypeface(nil, Typeface.BOLD)
+                            customLayout.addView(titleTV)
+                            
+                            local messageTV = TextView(themedContext)
+                            messageTV.setText("此操作会清除自身全部数据并退出！")
+                            messageTV.setTextSize(16)
+                            messageTV.setTextColor(DLG_MESSAGE_COLOR)
+                            messageTV.setPadding(0, dp2px(15), 0, dp2px(10))
+                            customLayout.addView(messageTV)
+                    
+                            local builder = AlertDialog.Builder(themedContext)
+                                .setView(customLayout)
+                                .setPositiveButton("确定", function()
+                                    activity.finish()
+                                    os.execute("pm clear " .. activity.getPackageName())
+                                end)
+                                .setNegativeButton("取消", nil)
+                                .setCancelable(false)
+                    
+                            local dialog = builder.create()
+                            dialog.show()
+                    
+                            local window = dialog.getWindow()
+                            local bg = GradientDrawable()
+                            bg.setColor(DLG_BG_COLOR)
+                            bg.setCornerRadius(dp2px(15))
+                            window.setBackgroundDrawable(bg)
+                    
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(BTN_COLOR)
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(BTN_COLOR)
+                        end
+
+                        dataMenu.add("清除网站数据").onMenuItemClick = function()
+                            local currentUrl = webView.getUrl() or ""
+                            local currentOrigin = currentUrl:match("^(https?://[^\n/]+)") or "未知网站"
+                            
+                            local customLayout = LinearLayout(themedContext)
+                            customLayout.setOrientation(LinearLayout.VERTICAL)
+                            customLayout.setPadding(dp2px(20), dp2px(20), dp2px(20), dp2px(0))
+                            
+                            local titleTV = TextView(themedContext)
+                            titleTV.setText("清除当前网站数据")
+                            titleTV.setTextSize(20)
+                            titleTV.setTextColor(DLG_TEXT_COLOR)
+                            titleTV.setTypeface(nil, Typeface.BOLD)
+                            customLayout.addView(titleTV)
+                            
+                            local messageTV = TextView(themedContext)
+                            messageTV.setText(
+                                "确定要清除 [" .. currentOrigin .. "] 的以下数据吗？\n\n" ..
+                                "1. 当前网站的缓存文件\n" ..
+                                "2. 当前网站的本地存储 (Local Storage)\n\n" ..
+                                "注意：Cookie 不会被清除"
+                            )
+                            messageTV.setTextSize(16)
+                            messageTV.setTextColor(DLG_MESSAGE_COLOR)
+                            messageTV.setPadding(0, dp2px(15), 0, dp2px(10))
+                            customLayout.addView(messageTV)
+                        
+                            local builder = AlertDialog.Builder(themedContext)
+                                .setView(customLayout)
+                                .setPositiveButton("确定", function()
+                                    webView.clearCache(true) 
+                                    
+                                    local jsToClearStorage = "localStorage.clear();"
+                                    
+                                    if webView.evaluateJavascript then
+                                        webView.evaluateJavascript(jsToClearStorage, nil)
+                                    else
+                                        webView.loadUrl("javascript:" .. jsToClearStorage)
+                                    end
+                                    
+                                    webView.reload()
+                                    
+                                    Toast.makeText(activity, "清除完毕", Toast.LENGTH_LONG).show()
+                                end)
+                                .setNegativeButton("取消", nil)
+                                .setCancelable(false) 
+                        
+                            local dialog = builder.create()
+                            dialog.show()
+                            
+                            dialog.setCanceledOnTouchOutside(false)
+                        
+                            local window = dialog.getWindow()
+                            local bg = GradientDrawable()
+                            bg.setColor(DLG_BG_COLOR)
+                            bg.setCornerRadius(dp2px(15))
+                            window.setBackgroundDrawable(bg)
+                        
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(BTN_COLOR)
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(BTN_COLOR)
+                        end
+                        dataPop.show()
+                    end
+
+                    subMenu.add("IP 检查").onMenuItemClick = function()
+                        local ipPop = PopupMenu(activity, more)
+                        local ipMenu = ipPop.Menu
+                        ipMenu.add("IPw.cn").onMenuItemClick = function()
+                            webView.loadUrl("https://ipw.cn/")
+                        end
+                        ipMenu.add("纯IPv6测试").onMenuItemClick = function()
+                            webView.loadUrl("https://ipv6.test-ipv6.com/")
+                        end
+                        ipMenu.add("网站延迟").onMenuItemClick = function()
+                            webView.loadUrl("https://ip.skk.moe/simple")
+                        end
+                        ipMenu.add("DNS泄露测试 (browserscan)").onMenuItemClick = function()
+                            webView.loadUrl("https://www.browserscan.net/zh/dns-leak")
+                        end
+                        ipMenu.add("DNS泄露测试 (Surfshark)").onMenuItemClick = function()
+                            webView.loadUrl("https://surfshark.com/zh/dns-leak-test")
+                        end
+                        ipPop.show()
+                    end
+
+                    subMenu.add("切换面板").onMenuItemClick = function()
+                        local panelPop = PopupMenu(activity, more)
+                        local panelMenu = panelPop.Menu
+                        panelMenu.add("Meta").onMenuItemClick = function()
+                            local url = "https://metacubex.github.io/metacubexd/#/proxies"
+                            webView.loadUrl(url)
+                            defaultUrl = url
+                            saveDefaultUrl(url)
+                        end
+                        panelMenu.add("Yacd").onMenuItemClick = function()
+                            local url = "https://yacd.metacubex.one/#/proxies"
+                            webView.loadUrl(url)
+                            defaultUrl = url
+                            saveDefaultUrl(url)
+                        end
+                        panelMenu.add("Zash").onMenuItemClick = function()
+                            local url = "https://board.zash.run.place/#/proxies"
+                            webView.loadUrl(url)
+                            defaultUrl = url
+                            saveDefaultUrl(url)
+                        end
+                        panelMenu.add("Local（本地端口）").onMenuItemClick = function()
+                            local url = "http://127.0.0.1:9090/ui/#/proxies"
+                            webView.loadUrl(url)
+                            defaultUrl = url
+                            saveDefaultUrl(url)
+                        end
+                        panelPop.show()
+                    end
+                    
+                    subPop.show()
                 end
 
-                menu.add("      点我闪退(Exit)").onMenuItemClick = function()
+                menu.add("点我闪退(Exit)").onMenuItemClick = function()
                     activity.finish()
                     os.exit(0)
                 end

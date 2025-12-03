@@ -28,11 +28,11 @@ end)
                 local themedContext, DLG_BG_COLOR, DLG_TEXT_COLOR, DLG_MESSAGE_COLOR, BTN_COLOR = getDialogThemeContext()
                 local function dp2px(dp) return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, activity.getResources().getDisplayMetrics()) end
 
-                menu.add("Debug").onMenuItemClick = function()
+                menu.add("📁 清除数据").onMenuItemClick = function()
                     local subPop = PopupMenu(activity, more)
                     local subMenu = subPop.Menu
                     
-                    subMenu.add("清除数据").onMenuItemClick = function()
+                    subMenu.add("清除程序数据").onMenuItemClick = function()
                         local customLayout = LinearLayout(themedContext)
                         customLayout.setOrientation(LinearLayout.VERTICAL)
                         customLayout.setPadding(dp2px(20), dp2px(20), dp2px(20), dp2px(0))
@@ -133,6 +133,57 @@ end)
                     
                         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(BTN_COLOR)
                         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(BTN_COLOR)
+                    end
+                    subPop.show()
+                end
+
+                menu.add("📁 IP 检查").onMenuItemClick = function()
+                    local subPop = PopupMenu(activity, more)
+                    local subMenu = subPop.Menu
+                    subMenu.add("IPw.cn").onMenuItemClick = function()
+                        webView.loadUrl("https://ipw.cn/")
+                    end
+                    subMenu.add("纯IPv6测试").onMenuItemClick = function()
+                        webView.loadUrl("https://ipv6.test-ipv6.com/")
+                    end
+                    subMenu.add("网站延迟").onMenuItemClick = function()
+                        webView.loadUrl("https://ip.skk.moe/simple")
+                    end
+                    subMenu.add("DNS泄露测试 (browserscan)").onMenuItemClick = function()
+                        webView.loadUrl("https://www.browserscan.net/zh/dns-leak")
+                    end
+                    subMenu.add("DNS泄露测试 (Surfshark)").onMenuItemClick = function()
+                        webView.loadUrl("https://surfshark.com/zh/dns-leak-test")
+                    end
+                    subPop.show()
+                end
+
+                menu.add("📁 切换面板").onMenuItemClick = function()
+                    local subPop = PopupMenu(activity, more)
+                    local subMenu = subPop.Menu
+                    subMenu.add("Meta").onMenuItemClick = function()
+                        local url = "https://metacubex.github.io/metacubexd/#/proxies"
+                        webView.loadUrl(url)
+                        defaultUrl = url
+                        saveDefaultUrl(url)
+                    end
+                    subMenu.add("Yacd").onMenuItemClick = function()
+                        local url = "https://yacd.metacubex.one/#/proxies"
+                        webView.loadUrl(url)
+                        defaultUrl = url
+                        saveDefaultUrl(url)
+                    end
+                    subMenu.add("Zash").onMenuItemClick = function()
+                        local url = "https://board.zash.run.place/#/proxies"
+                        webView.loadUrl(url)
+                        defaultUrl = url
+                        saveDefaultUrl(url)
+                    end
+                    subMenu.add("Local（本地端口）").onMenuItemClick = function()
+                        local url = "http://127.0.0.1:9090/ui/#/proxies"
+                        webView.loadUrl(url)
+                        defaultUrl = url
+                        saveDefaultUrl(url)
                     end
                     subPop.show()
                 end
@@ -296,57 +347,6 @@ end)
                     local intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://pomf2.lain.la/"))
                     activity.startActivity(intent)
                     return true
-                end
-
-                menu.add("IP 检查").onMenuItemClick = function()
-                    local subPop = PopupMenu(activity, more)
-                    local subMenu = subPop.Menu
-                    subMenu.add("IPw.cn").onMenuItemClick = function()
-                        webView.loadUrl("https://ipw.cn/")
-                    end
-                    subMenu.add("纯IPv6测试").onMenuItemClick = function()
-                        webView.loadUrl("https://ipv6.test-ipv6.com/")
-                    end
-                    subMenu.add("网站延迟").onMenuItemClick = function()
-                        webView.loadUrl("https://ip.skk.moe/simple")
-                    end
-                    subMenu.add("DNS泄露测试 (browserscan)").onMenuItemClick = function()
-                        webView.loadUrl("https://www.browserscan.net/zh/dns-leak")
-                    end
-                    subMenu.add("DNS泄露测试 (Surfshark)").onMenuItemClick = function()
-                        webView.loadUrl("https://surfshark.com/zh/dns-leak-test")
-                    end
-                    subPop.show()
-                end
-
-                menu.add("切换面板").onMenuItemClick = function()
-                    local subPop = PopupMenu(activity, more)
-                    local subMenu = subPop.Menu
-                    subMenu.add("Meta").onMenuItemClick = function()
-                        local url = "https://metacubex.github.io/metacubexd/#/proxies"
-                        webView.loadUrl(url)
-                        defaultUrl = url
-                        saveDefaultUrl(url)
-                    end
-                    subMenu.add("Yacd").onMenuItemClick = function()
-                        local url = "https://yacd.metacubex.one/#/proxies"
-                        webView.loadUrl(url)
-                        defaultUrl = url
-                        saveDefaultUrl(url)
-                    end
-                    subMenu.add("Zash").onMenuItemClick = function()
-                        local url = "https://board.zash.run.place/#/proxies"
-                        webView.loadUrl(url)
-                        defaultUrl = url
-                        saveDefaultUrl(url)
-                    end
-                    subMenu.add("Local（本地端口）").onMenuItemClick = function()
-                        local url = "http://127.0.0.1:9090/ui/#/proxies"
-                        webView.loadUrl(url)
-                        defaultUrl = url
-                        saveDefaultUrl(url)
-                    end
-                    subPop.show()
                 end
 
                 local function showVersionInfo(updateTime)

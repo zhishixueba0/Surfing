@@ -188,7 +188,7 @@ end)
                     subPop.show()
                 end
 
-                menu.add("外部打开").onMenuItemClick = function()
+                menu.add("      外部打开").onMenuItemClick = function()
                     local currentUrl = webView.getUrl()
                     if currentUrl and currentUrl:match("^https?://") then
                         local intent = Intent(Intent.ACTION_VIEW, Uri.parse(currentUrl))

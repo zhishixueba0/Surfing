@@ -178,12 +178,7 @@ end)
                     dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(BTN_COLOR)
                 end
 
-
-                menu.add("Ad 拦截测试").onMenuItemClick = function()
-                    webView.loadUrl("https://paileactivist.github.io/toolz/adblock.html")
-                end
-
-                menu.add("背景图床 URL").onMenuItemClick = function()
+                menu.add("图床 URL").onMenuItemClick = function()
                     local intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://pomf2.lain.la/"))
                     activity.startActivity(intent)
                     return true
@@ -352,7 +347,7 @@ end)
                     end)
                 end
 
-                menu.add("更新 WebView").onMenuItemClick = function()
+                menu.add("更新 View").onMenuItemClick = function()
                     activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.webview")))
                 end
 
@@ -477,27 +472,6 @@ end)
                         dataPop.show()
                     end
 
-                    subMenu.add("IP 检查").onMenuItemClick = function()
-                        local ipPop = PopupMenu(activity, more)
-                        local ipMenu = ipPop.Menu
-                        ipMenu.add("IPw.cn").onMenuItemClick = function()
-                            webView.loadUrl("https://ipw.cn/")
-                        end
-                        ipMenu.add("纯IPv6测试").onMenuItemClick = function()
-                            webView.loadUrl("https://ipv6.test-ipv6.com/")
-                        end
-                        ipMenu.add("网站延迟").onMenuItemClick = function()
-                            webView.loadUrl("https://ip.skk.moe/simple")
-                        end
-                        ipMenu.add("DNS泄露测试 (browserscan)").onMenuItemClick = function()
-                            webView.loadUrl("https://www.browserscan.net/zh/dns-leak")
-                        end
-                        ipMenu.add("DNS泄露测试 (Surfshark)").onMenuItemClick = function()
-                            webView.loadUrl("https://surfshark.com/zh/dns-leak-test")
-                        end
-                        ipPop.show()
-                    end
-
                     subMenu.add("切换面板").onMenuItemClick = function()
                         local panelPop = PopupMenu(activity, more)
                         local panelMenu = panelPop.Menu
@@ -527,7 +501,32 @@ end)
                         end
                         panelPop.show()
                     end
-                    
+
+                    subMenu.add("IP 属性").onMenuItemClick = function()
+                        local ipPop = PopupMenu(activity, more)
+                        local ipMenu = ipPop.Menu
+                        ipMenu.add("IPw.cn").onMenuItemClick = function()
+                            webView.loadUrl("https://ipw.cn/")
+                        end
+                        ipMenu.add("纯IPv6测试").onMenuItemClick = function()
+                            webView.loadUrl("https://ipv6.test-ipv6.com/")
+                        end
+                        ipMenu.add("网站延迟").onMenuItemClick = function()
+                            webView.loadUrl("https://ip.skk.moe/simple")
+                        end
+                        ipMenu.add("DNS泄露测试 (browserscan)").onMenuItemClick = function()
+                            webView.loadUrl("https://www.browserscan.net/zh/dns-leak")
+                        end
+                        ipMenu.add("DNS泄露测试 (Surfshark)").onMenuItemClick = function()
+                            webView.loadUrl("https://surfshark.com/zh/dns-leak-test")
+                        end
+                        ipPop.show()
+                    end
+
+                    subMenu.add("广告拦截测试").onMenuItemClick = function()
+                        webView.loadUrl("https://paileactivist.github.io/toolz/adblock.html")
+                    end
+
                     subPop.show()
                 end
 

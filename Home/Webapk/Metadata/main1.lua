@@ -25,9 +25,6 @@ end)
                 local pop = PopupMenu(activity, more)
                 local menu = pop.Menu
                 
-                local CookieManager = import "android.webkit.CookieManager"
-                local WebStorage = import "android.webkit.WebStorage"
-                
                 local themedContext, DLG_BG_COLOR, DLG_TEXT_COLOR, DLG_MESSAGE_COLOR, BTN_COLOR = getDialogThemeContext()
                 local function dp2px(dp) return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, activity.getResources().getDisplayMetrics()) end
 
@@ -87,43 +84,44 @@ end)
                     end
                 end
 
-                menu.add("清除当前网站数据").onMenuItemClick = function()
-                    local themedContext, DLG_BG_COLOR, DLG_TEXT_COLOR, DLG_MESSAGE_COLOR, BTN_COLOR = getDialogThemeContext()
-                    local AlertDialog = import "androidx.appcompat.app.AlertDialog"
-
+                menu.add("清除网站数据").onMenuItemClick = function()
+                    local currentUrl = webView.getUrl() or ""
+                    local currentOrigin = currentUrl:match("^(https?://[^\n/]+)") or "未知网站"
+                    
                     local customLayout = LinearLayout(themedContext)
                     customLayout.setOrientation(LinearLayout.VERTICAL)
                     customLayout.setPadding(dp2px(20), dp2px(20), dp2px(20), dp2px(0))
                     
                     local titleTV = TextView(themedContext)
-                    titleTV.setText("注意")
+                    titleTV.setText("清除当前网站数据")
                     titleTV.setTextSize(20)
                     titleTV.setTextColor(DLG_TEXT_COLOR)
                     titleTV.setTypeface(nil, Typeface.BOLD)
                     customLayout.addView(titleTV)
                     
-                    local currentOrigin = webView.getUrl() or "未知地址"
-                    
                     local messageTV = TextView(themedContext)
-                    messageTV.setText("此操作将清除当前界面访问的网站缓存、Cookie 和本地存储数据!")
+                    messageTV.setText(
+                        "确定要清除 [" .. currentOrigin .. "] 的以下数据吗？\n\n" ..
+                        "1. 当前网站的缓存文件\n" ..
+                        "2. 当前网站的本地存储 (Local Storage)\n\n" ..
+                        "注意：Cookie 不会被清除"
+                    )
                     messageTV.setTextSize(16)
                     messageTV.setTextColor(DLG_MESSAGE_COLOR)
                     messageTV.setPadding(0, dp2px(15), 0, dp2px(10))
                     customLayout.addView(messageTV)
-
+                
                     local builder = AlertDialog.Builder(themedContext)
                         .setView(customLayout)
-                        .setPositiveButton("确定清除", function()
-                            webView.clearCache(true)
-                            if CookieManager and CookieManager.getInstance then
-                                local cookieManager = CookieManager.getInstance()
-                                if cookieManager then
-                                    cookieManager.removeAllCookies(nil)
-                                    cookieManager.flush()
-                                end
-                            end
-                            if WebStorage and WebStorage.getInstance then
-                                WebStorage.getInstance().deleteAllData()
+                        .setPositiveButton("确定", function()
+                            webView.clearCache(true) 
+                            
+                            local jsToClearStorage = "localStorage.clear();"
+                            
+                            if webView.evaluateJavascript then
+                                webView.evaluateJavascript(jsToClearStorage, nil)
+                            else
+                                webView.loadUrl("javascript:" .. jsToClearStorage)
                             end
                             
                             webView.reload()
@@ -131,17 +129,19 @@ end)
                             Toast.makeText(activity, "清除完毕", Toast.LENGTH_LONG).show()
                         end)
                         .setNegativeButton("取消", nil)
-                        .setCancelable(true) 
-            
+                        .setCancelable(false) 
+                
                     local dialog = builder.create()
                     dialog.show()
-            
+                    
+                    dialog.setCanceledOnTouchOutside(false)
+                
                     local window = dialog.getWindow()
                     local bg = GradientDrawable()
                     bg.setColor(DLG_BG_COLOR)
                     bg.setCornerRadius(dp2px(15))
                     window.setBackgroundDrawable(bg)
-            
+                
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(BTN_COLOR)
                     dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(BTN_COLOR)
                 end

@@ -43,45 +43,6 @@ end)
                     end
                 end
 
-
-                local function showPlaceholderDialog()
-                    local customLayout = LinearLayout(themedContext)
-                    customLayout.setOrientation(LinearLayout.VERTICAL)
-                    customLayout.setPadding(dp2px(20), dp2px(20), dp2px(20), dp2px(0))
-                    
-                    local titleTV = TextView(themedContext)
-                    titleTV.setText("提示")
-                    titleTV.setTextSize(20)
-                    titleTV.setTextColor(DLG_TEXT_COLOR)
-                    titleTV.setTypeface(nil, Typeface.BOLD)
-                    customLayout.addView(titleTV)
-                    
-                    local messageTV = TextView(themedContext)
-                    messageTV.setText("还没写好:)")
-                    messageTV.setTextSize(16)
-                    messageTV.setTextColor(DLG_MESSAGE_COLOR)
-                    messageTV.setPadding(0, dp2px(15), 0, dp2px(10))
-                    customLayout.addView(messageTV)
-
-                    local dialog = AlertDialog.Builder(themedContext)
-                        .setView(customLayout)
-                        .setPositiveButton("确定", nil)
-                        .setCancelable(false)
-                        .create()
-                    
-                    dialog.show()
-                    
-                    local window = dialog.getWindow()
-                    local bg = GradientDrawable()
-                    bg.setColor(DLG_BG_COLOR)
-                    bg.setCornerRadius(dp2px(15))
-                    window.setBackgroundDrawable(bg)
-                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(BTN_COLOR)
-                end
-                menu.add("应用过滤").onMenuItemClick = showPlaceholderDialog
-                menu.add("磁贴设置").onMenuItemClick = showPlaceholderDialog
-
-
                 menu.add("主页设置").onMenuItemClick = function()
                     local customLayout = LinearLayout(themedContext)
                     customLayout.setOrientation(LinearLayout.VERTICAL)

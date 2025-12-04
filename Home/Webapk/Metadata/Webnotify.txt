@@ -1,18 +1,7 @@
-推送通知: 关
+推送通知: 开
 启动弹窗: 关
 菜单标题: 🔝 内容置顶
-发布标识: 20251013_08
-
-深色主题: 关{
-then
-UIColor = "#222222"
-btColor = "#ffffff"
-nrColor = "#dfffffff" 
-else
-UIColor = "#ffffff"
-btColor = "#000000"
-nrColor = "#333333"
-}
+发布标识: 20251204_01
 
 内容标题: 10/13
 内容居中: 开

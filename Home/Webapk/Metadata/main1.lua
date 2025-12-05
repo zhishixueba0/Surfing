@@ -43,6 +43,26 @@ end)
                     end
                 end
 
+                local ComponentName = import "android.content.ComponentName"
+                local function appExists(pkg)
+                    local pm = activity.getPackageManager()
+                    return pcall(function()
+                        pm.getPackageInfo(pkg, 0)
+                    end)
+                end
+                menu.add("应用过滤").onMenuItemClick = function()
+                    local targetPackage = "com.surfing.tile"
+                    local targetActivity = "com.surfing.tile.ui.AppFilterActivity"
+                
+                    if appExists(targetPackage) then
+                        local intent = Intent()
+                        intent.setComponent(ComponentName(targetPackage, targetActivity))
+                        activity.startActivity(intent)
+                    else
+                        Toast.makeText(activity, "未找到应用 " .. targetPackage, Toast.LENGTH_LONG).show()
+                    end
+                end
+
                 menu.add("主页设置").onMenuItemClick = function()
                     local customLayout = LinearLayout(themedContext)
                     customLayout.setOrientation(LinearLayout.VERTICAL)

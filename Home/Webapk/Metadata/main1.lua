@@ -54,6 +54,16 @@ end)
                     end)
                 end
 
+                menu.add("磁贴设置").onMenuItemClick = function()
+                    local targetPkg = "com.surfing.tile"
+                    local targetAct = "com.surfing.tile.ui.ApiSettingsActivity"
+                    local intent = Intent()
+                    intent.setClassName(targetPkg, targetAct)
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    local ok, err = pcall(function()
+                        activity.startActivity(intent)
+                    end)
+                end
 
                 menu.add("主页设置").onMenuItemClick = function()
                     local customLayout = LinearLayout(themedContext)

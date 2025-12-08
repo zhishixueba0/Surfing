@@ -53,7 +53,16 @@ end)
                         activity.startActivity(intent)
                     end)
                 end
-
+                menu.add("配置覆写").onMenuItemClick = function()
+                    local targetPkg = "com.surfing.tile"
+                    local targetAct = "com.surfing.tile.ui.ClashSettingsActivity"
+                    local intent = Intent()
+                    intent.setClassName(targetPkg, targetAct)
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    local ok, err = pcall(function()
+                        activity.startActivity(intent)
+                    end)
+                end
                 menu.add("磁贴设置").onMenuItemClick = function()
                     local targetPkg = "com.surfing.tile"
                     local targetAct = "com.surfing.tile.ui.ApiSettingsActivity"

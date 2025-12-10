@@ -9,7 +9,23 @@ function isNetworkAvailable()
     local activeNetwork = connectivityManager.getActiveNetworkInfo()
     return activeNetwork ~= nil and activeNetwork.isConnected()
 end
+function openSurfingTile(activityName)
+    local targetPkg = "com.surfing.tile"
+    local targetAct = targetPkg .. ".ui." .. activityName
 
+    local intent = Intent()
+    intent.setClassName(targetPkg, targetAct)
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+    local ok = pcall(function()
+        activity.startActivity(intent)
+    end)  
+    if not ok then
+        Toast.makeText(activity,
+            "当前组件未安装\n群组内测中...",
+            Toast.LENGTH_SHORT).show()
+    end
+end
 Http.get(url1 .. "?t=" .. os.time(), nil, "UTF-8", headers, function(code, content)
     if code == 200 and content then
         version = content:match("推送版本号:%s*(.-)\n") or "未知"
@@ -20,7 +36,7 @@ end)
         if code == 200 and content then
             local pushNotification = content:match("推送通知:%s*(.-)\n") or "关"
             local menuTitle = content:match("菜单标题:%s*(.-)\n") or "信息通知"
-            
+
             more.onClick = function()
                 local pop = PopupMenu(activity, more)
                 local menu = pop.Menu
@@ -44,21 +60,13 @@ end)
                 end
 
                 menu.add("网络过滤").onMenuItemClick = function()
-                    local targetPkg = "com.surfinng.tile"
-                    local targetAct = "com.surfinng.tile.ui.NetworkFilterActivity"
-                    local intent = Intent()
-                    intent.setClassName(targetPkg, targetAct)
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                
-                    local ok, err = pcall(function()
-                        activity.startActivity(intent)
-                    end)
-                
-                    if not ok then
-                        Toast.makeText(activity,
-                            "磁贴设置还没写好 :)", 
-                            Toast.LENGTH_SHORT).show()
-                    end
+                    openSurfingTile("NetworkFilterActivity")
+                end           
+                menu.add("应用过滤").onMenuItemClick = function()
+                    openSurfingTile("AppFilterActivity")
+                end             
+                menu.add("磁贴设置").onMenuItemClick = function()
+                    openSurfingTile("ClashSettingsActivity")
                 end
 
                 menu.add("主页设置").onMenuItemClick = function()

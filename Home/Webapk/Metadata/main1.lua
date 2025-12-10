@@ -43,53 +43,25 @@ end)
                     end
                 end
 
-                TARGET_PKG = "com.surfing.tile"
-                UI_PREFIX = "com.surfing.tile.ui."
-                FLAG_ACTIVITY_NEW_TASK = Intent.FLAG_ACTIVITY_NEW_TASK
-                
-                function startActivityWithCheck(activityName)
-                    targetAct = UI_PREFIX .. activityName
-                    pm = activity.getPackageManager()
-                    
-                    ok = pcall(function()
-                        pm.getPackageInfo(TARGET_PKG, 0)
+                menu.add("网络过滤").onMenuItemClick = function()
+                    local targetPkg = "com.surfing.tile"
+                    local targetAct = "com.surfing.tile.ui.NetworkFilterActivity"
+                    local pm = activity.getPackageManager()
+                    local ok = pcall(function()
+                        pm.getPackageInfo(targetPkg, 0)
                     end)
-                    exist = ok
-                    
+                    local exist = ok
+                
                     if not exist then
                         Toast.makeText(activity,
-                            "当前组件未安装\n群组内测中...",
+                            "No",
                             Toast.LENGTH_SHORT).show()
                         return
                     end
-                    
-                    intent = Intent()
-                    intent.setClassName(TARGET_PKG, targetAct)
-                    intent.setFlags(FLAG_ACTIVITY_NEW_TASK)
-                    
-                    ok, err = pcall(function()
-                        activity.startActivity(intent)
-                    end)
-                    
-                    if not ok then
-                        Toast.makeText(activity, "启动失败：" .. (err or "未知错误"), Toast.LENGTH_LONG).show()
-                    end
-                end
-                
-                menu.add("网络过滤").onMenuItemClick = function()
-                    startActivityWithCheck("NetworkFilterActivity")
-                end
-                
-                menu.add("应用过滤").onMenuItemClick = function()
-                    startActivityWithCheck("AppFilterActivity")
-                end
-                
-                menu.add("配置覆写").onMenuItemClick = function()
-                    startActivityWithCheck("ClashSettingsActivity")
-                end
-                
-                menu.add("磁贴设置").onMenuItemClick = function()
-                    startActivityWithCheck("ApiSettingsActivity")
+                    local intent = Intent()
+                    intent.setClassName(targetPkg, targetAct)
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    activity.startActivity(intent)
                 end
 
                 menu.add("主页设置").onMenuItemClick = function()

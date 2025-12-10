@@ -43,45 +43,44 @@ end)
                     end
                 end
 
-                menu.add("网络控制").onMenuItemClick = function()
-                    local targetPkg = "com.surfing.tile"
-                    local targetAct = "com.surfing.tile.ui.NetworkFilterActivity"
+                TARGET_PKG = "com.surfing.tile"
+                UI_PREFIX = "com.surfing.tile.ui."
+                FLAG_ACTIVITY_NEW_TASK = Intent.FLAG_ACTIVITY_NEW_TASK
+                
+                local function startActivity(activityName)
+                    local targetAct = UI_PREFIX .. activityName
                     local intent = Intent()
-                    intent.setClassName(targetPkg, targetAct)
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.setClassName(TARGET_PKG, targetAct)
+                    intent.setFlags(FLAG_ACTIVITY_NEW_TASK)
+                    
                     local ok, err = pcall(function()
                         activity.startActivity(intent)
                     end)
+                    --
+                end
+                menu.add("网络过滤").onMenuItemClick = function()
+                    local activityName = "NetworkFilterActivity"
+                    local pm = activity.getPackageManager()
+                    local ok = pcall(function()
+                        pm.getPackageInfo(TARGET_PKG, 0)
+                    end)
+                    local exist = ok
+                    if not exist then
+                        Toast.makeText(activity,
+                            "当前组件未安装\n群组内测中...",
+                            Toast.LENGTH_SHORT).show()
+                        return
+                    end
+                    startActivity(activityName)
                 end
                 menu.add("应用过滤").onMenuItemClick = function()
-                    local targetPkg = "com.surfing.tile"
-                    local targetAct = "com.surfing.tile.ui.AppFilterActivity"
-                    local intent = Intent()
-                    intent.setClassName(targetPkg, targetAct)
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    local ok, err = pcall(function()
-                        activity.startActivity(intent)
-                    end)
+                    startActivity("AppFilterActivity")
                 end
                 menu.add("配置覆写").onMenuItemClick = function()
-                    local targetPkg = "com.surfing.tile"
-                    local targetAct = "com.surfing.tile.ui.ClashSettingsActivity"
-                    local intent = Intent()
-                    intent.setClassName(targetPkg, targetAct)
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    local ok, err = pcall(function()
-                        activity.startActivity(intent)
-                    end)
+                    startActivity("ClashSettingsActivity")
                 end
                 menu.add("磁贴设置").onMenuItemClick = function()
-                    local targetPkg = "com.surfing.tile"
-                    local targetAct = "com.surfing.tile.ui.ApiSettingsActivity"
-                    local intent = Intent()
-                    intent.setClassName(targetPkg, targetAct)
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    local ok, err = pcall(function()
-                        activity.startActivity(intent)
-                    end)
+                    startActivity("ApiSettingsActivity")
                 end
 
                 menu.add("主页设置").onMenuItemClick = function()

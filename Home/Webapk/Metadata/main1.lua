@@ -44,8 +44,8 @@ end)
                 end
 
                 menu.add("网络过滤").onMenuItemClick = function()
-                    local targetPkg = "com.surfing.tile"
-                    local targetAct = "com.surfing.tile.ui.NetworkFilterActivity"
+                    local targetPkg = "com.surfinng.tile"
+                    local targetAct = "com.surfinng.tile.ui.NetworkFilterActivity"
                     local intent = Intent()
                     intent.setClassName(targetPkg, targetAct)
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

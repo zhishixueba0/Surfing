@@ -43,18 +43,18 @@ end)
                     end
                 end
 
-                local TARGET_PKG = "com.surfing.tile"
-                local UI_PREFIX = "com.surfing.tile.ui."
-                local FLAG_ACTIVITY_NEW_TASK = Intent.FLAG_ACTIVITY_NEW_TASK
+                TARGET_PKG = "com.surfing.tile"
+                UI_PREFIX = "com.surfing.tile.ui."
+                FLAG_ACTIVITY_NEW_TASK = Intent.FLAG_ACTIVITY_NEW_TASK
                 
-                local function startActivityWithCheck(activityName)
-                    local targetAct = UI_PREFIX .. activityName
-                    local pm = activity.getPackageManager()
+                function startActivityWithCheck(activityName)
+                    targetAct = UI_PREFIX .. activityName
+                    pm = activity.getPackageManager()
                     
-                    local ok = pcall(function()
+                    ok = pcall(function()
                         pm.getPackageInfo(TARGET_PKG, 0)
                     end)
-                    local exist = ok
+                    exist = ok
                     
                     if not exist then
                         Toast.makeText(activity,
@@ -63,11 +63,11 @@ end)
                         return
                     end
                     
-                    local intent = Intent()
+                    intent = Intent()
                     intent.setClassName(TARGET_PKG, targetAct)
                     intent.setFlags(FLAG_ACTIVITY_NEW_TASK)
                     
-                    local ok, err = pcall(function()
+                    ok, err = pcall(function()
                         activity.startActivity(intent)
                     end)
                     

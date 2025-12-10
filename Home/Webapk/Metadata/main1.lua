@@ -46,22 +46,19 @@ end)
                 menu.add("网络过滤").onMenuItemClick = function()
                     local targetPkg = "com.surfing.tile"
                     local targetAct = "com.surfing.tile.ui.NetworkFilterActivity"
-                    local pm = activity.getPackageManager()
-                    local ok = pcall(function()
-                        pm.getPackageInfo(targetPkg, 0)
-                    end)
-                    local exist = ok
-                
-                    if not exist then
-                        Toast.makeText(activity,
-                            "No",
-                            Toast.LENGTH_SHORT).show()
-                        return
-                    end
                     local intent = Intent()
                     intent.setClassName(targetPkg, targetAct)
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    activity.startActivity(intent)
+                
+                    local ok, err = pcall(function()
+                        activity.startActivity(intent)
+                    end)
+                
+                    if not ok then
+                        Toast.makeText(activity,
+                            "磁贴设置还没写好 :)", 
+                            Toast.LENGTH_SHORT).show()
+                    end
                 end
 
                 menu.add("主页设置").onMenuItemClick = function()

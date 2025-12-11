@@ -65,6 +65,9 @@ end)
                 menu.add("应用过滤").onMenuItemClick = function()
                     openSurfingTile("AppFilterActivity")
                 end             
+                menu.add("配置覆写").onMenuItemClick = function()
+                    openSurfingTile("ClashConfigActivity")
+                end
                 menu.add("磁贴设置").onMenuItemClick = function()
                     openSurfingTile("ClashSettingsActivity")
                 end

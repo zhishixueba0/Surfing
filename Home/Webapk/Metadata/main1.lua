@@ -69,7 +69,7 @@ end)
                     openSurfingTile("ClashConfigActivity")
                 end
                 menu.add("磁贴设置").onMenuItemClick = function()
-                    openSurfingTile("ClashSettingsActivity")
+                    openSurfingTile("ApiSettingsActivity")
                 end
 
                 menu.add("主页设置").onMenuItemClick = function()

@@ -1,7 +1,7 @@
 推送版本号: v6.6.2
 
 更新日志: {
-更新内容: 
+更新内容：
 v6.6.2
 1、解决了一些已知问题。
 备用下载链接: https://cdn.jsdelivr.net/gh/GitMetaio/Surfing@rm/Home/Webapk/Version/Web_6.6.2_release.apk

@@ -492,6 +492,12 @@ end)
                         panelPop.show()
                     end
 
+                    local currentTipState = getShowTipsState()
+                    local tipMenuTitle = currentTipState and "关闭Tips" or "开启Tips"
+                    menu.add(tipMenuTitle).onMenuItemClick = function()
+                        toggleTipsAndSaveState()
+                    end
+
                     subMenu.add("IP 属性").onMenuItemClick = function()
                         local ipPop = PopupMenu(activity, more)
                         local ipMenu = ipPop.Menu

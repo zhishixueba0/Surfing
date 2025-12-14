@@ -494,7 +494,7 @@ end)
 
                     local currentTipState = getShowTipsState()
                     local tipMenuTitle = currentTipState and "关闭Tips" or "开启Tips"
-                    menu.add(tipMenuTitle).onMenuItemClick = function()
+                    subMenu.add(tipMenuTitle).onMenuItemClick = function()
                         toggleTipsAndSaveState()
                     end
 

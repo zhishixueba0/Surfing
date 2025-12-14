@@ -61,5 +61,5 @@ v6.3.8
 2、优化一些已知问题...
 }
 
-强制更新: 开
+强制更新: 关
 下载链接: https://raw.githubusercontent.com/GitMetaio/Surfing/rm/Home/Webapk/Version/Web_6.4.6_release.apk

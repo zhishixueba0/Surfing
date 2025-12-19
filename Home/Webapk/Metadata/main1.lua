@@ -142,7 +142,10 @@ end)
                                     .setPositiveButton("确定", nil)
                                     .setCancelable(false)
                                 local dialog = errorDialog.create()
+                                
+                                dialog.setOnDismissListener({onDismiss=function() setBlur(false) end})
                                 dialog.show()
+                                setBlur(true)
 
                                 local window = dialog.getWindow()
                                 local bg = GradientDrawable()
@@ -156,7 +159,10 @@ end)
                         .setCancelable(false)
                         
                     local dialog = builder.create()
+                    
+                    dialog.setOnDismissListener({onDismiss=function() setBlur(false) end})
                     dialog.show()
+                    setBlur(true)
 
                     local window = dialog.getWindow()
                     local bg = GradientDrawable()
@@ -240,7 +246,11 @@ end)
                     builder.setPositiveButton("Telegram", nil)
                     builder.setNeutralButton("取消", nil)
                     builder.setCancelable(false)
-                    local dialog = builder.show()
+                    local dialog = builder.create()
+                    
+                    dialog.setOnDismissListener({onDismiss=function() setBlur(false) end})
+                    dialog.show()
+                    setBlur(true)
                     
                     local window = dialog.getWindow()
                     local bg = GradientDrawable()
@@ -386,7 +396,10 @@ end)
                                 .setCancelable(false)
                     
                             local dialog = builder.create()
+                            
+                            dialog.setOnDismissListener({onDismiss=function() setBlur(false) end})
                             dialog.show()
+                            setBlur(true)
                     
                             local window = dialog.getWindow()
                             local bg = GradientDrawable()
@@ -446,7 +459,10 @@ end)
                                 .setCancelable(false) 
                         
                             local dialog = builder.create()
+                            
+                            dialog.setOnDismissListener({onDismiss=function() setBlur(false) end})
                             dialog.show()
+                            setBlur(true)
                             
                             dialog.setCanceledOnTouchOutside(false)
                         

@@ -22,7 +22,7 @@ function openSurfingTile(activityName)
     end)  
     if not ok then
         Toast.makeText(activity,
-            "当前组件未安装\n群组内测中...",
+            "当前组件未安装！",
             Toast.LENGTH_SHORT).show()
     end
 end
